@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:uber_clone_driver_app/pages/dashboard.dart';
 
 import '../methods/common_methods.dart';
@@ -25,6 +26,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController vehicleColorTextEditingController = TextEditingController();
   TextEditingController vehicleNumberTextEditingController = TextEditingController();
   CommonMethods cMethods = CommonMethods();
+  XFile? imageFile;
 
   checkIfNetworkIsAvailable() async {
     await cMethods.checkConnectivity(context);
@@ -81,6 +83,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
 Navigator.push(context, MaterialPageRoute(builder: (c)=>Dashboard()));
   }
 
+  chooseImageFromGallery()async{
+    final pickedFile=await  ImagePicker().pickImage(source: ImageSource.gallery);
+    if(pickedFile!=null){
+      setState(() {
+        imageFile=pickedFile;
+      });
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,14 +102,17 @@ Navigator.push(context, MaterialPageRoute(builder: (c)=>Dashboard()));
           child: Column(
             children: [
               const SizedBox(height: 40,),
+            imageFile==null?
             CircleAvatar(
               radius: 86,
               backgroundImage: AssetImage('assets/images/avatarman.png'),
+            ):Container(
+              //here
             ),
               const SizedBox(height: 10,),
               GestureDetector(
                 onTap: (){
-
+                  chooseImageFromGallery();
                 },
                 child: const Text(
                   'Choose Image ',
