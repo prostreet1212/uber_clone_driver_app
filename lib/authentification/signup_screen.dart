@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uber_clone_driver_app/pages/dashboard.dart';
@@ -7,7 +10,6 @@ import 'package:uber_clone_driver_app/pages/dashboard.dart';
 import '../methods/common_methods.dart';
 import '../widgets/loading_dialog.dart';
 import 'login_screen.dart';
-
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -22,15 +24,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
       TextEditingController();
   TextEditingController emailTextEditingController = TextEditingController();
   TextEditingController passwordTextEditingController = TextEditingController();
-  TextEditingController vehicleModelTextEditingController = TextEditingController();
-  TextEditingController vehicleColorTextEditingController = TextEditingController();
-  TextEditingController vehicleNumberTextEditingController = TextEditingController();
+  TextEditingController vehicleModelTextEditingController =
+      TextEditingController();
+  TextEditingController vehicleColorTextEditingController =
+      TextEditingController();
+  TextEditingController vehicleNumberTextEditingController =
+      TextEditingController();
   CommonMethods cMethods = CommonMethods();
   XFile? imageFile;
+  String urlOfUploadedImage = '';
 
   checkIfNetworkIsAvailable() async {
     await cMethods.checkConnectivity(context);
-    signUpFormValidation();
+    if (imageFile != null) {
+      signUpFormValidation();
+    } else {
+      cMethods.displaySnackBar('Please choose image first', context);
+    }
   }
 
   signUpFormValidation() {
@@ -45,13 +55,37 @@ class _SignUpScreenState extends State<SignUpScreen> {
     } else if (passwordTextEditingController.text.trim().length < 5) {
       cMethods.displaySnackBar(
           'your password must be atleast 8 or more characters', context);
+    } else if (vehicleNumberTextEditingController.text.trim().isEmpty) {
+      cMethods.displaySnackBar('please write your car model', context);
+    } else if (vehicleColorTextEditingController.text.trim().isEmpty) {
+      cMethods.displaySnackBar('please write your car color', context);
+    } else if (vehicleNumberTextEditingController.text.trim().isEmpty) {
+      cMethods.displaySnackBar('please write your car number', context);
     } else {
       //register user
-      registerNewUser();
+      uploadImageToStorage();
     }
   }
 
-  registerNewUser() async {
+  uploadImageToStorage() async {
+    String imageIDName = DateTime.now().millisecondsSinceEpoch.toString();
+    Reference referenceImage =
+        FirebaseStorage.instance.ref().child('Images').child(imageIDName);
+
+    UploadTask uploadTask = referenceImage.putFile(
+        File(imageFile!.path),
+        //SettableMetadata(contentType: 'image/png')
+    );
+    uploadTask.then((p0) => print('completed'));
+    TaskSnapshot snapshot = await uploadTask;
+    urlOfUploadedImage = await snapshot.ref.getDownloadURL();
+    setState(() {
+      urlOfUploadedImage;
+    });
+    //registerNewDriver();
+  }
+
+  registerNewDriver() async {
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -70,28 +104,51 @@ class _SignUpScreenState extends State<SignUpScreen> {
         .user;
     if (!context.mounted) return;
     Navigator.pop(context);
-    DatabaseReference usersRef=FirebaseDatabase.instance.ref()
-        .child('users').child(userFirebase!.uid);
-    Map userDataMap={
-      'name':userNameTextEditingController.text.trim(),
-      'email':emailTextEditingController.text.trim(),
-      'phone':userPhoneTextEditingController.text.trim(),
-      'id':userFirebase.uid,
-      'blockStatus':'no',
+    DatabaseReference usersRef = FirebaseDatabase.instance
+        .ref()
+        .child('drivers')
+        .child(userFirebase!.uid);
+
+    Map<String, String> driverCarInfo = {
+      'carColor': vehicleColorTextEditingController.text.trim(),
+      'carModel': vehicleModelTextEditingController.text.trim(),
+      'carNumber': vehicleNumberTextEditingController.text.trim(),
     };
-    usersRef.set(userDataMap);
-Navigator.push(context, MaterialPageRoute(builder: (c)=>Dashboard()));
+
+    Map driverDataMap = {
+      'photo': urlOfUploadedImage,
+      'car_details': driverCarInfo,
+      'name': userNameTextEditingController.text.trim(),
+      'email': emailTextEditingController.text.trim(),
+      'phone': userPhoneTextEditingController.text.trim(),
+      'id': userFirebase.uid,
+      'blockStatus': 'no',
+    };
+    usersRef.set(driverDataMap);
+    Navigator.push(context, MaterialPageRoute(builder: (c) => Dashboard()));
   }
 
-  chooseImageFromGallery()async{
-    final pickedFile=await  ImagePicker().pickImage(source: ImageSource.gallery);
-    if(pickedFile!=null){
+  chooseImageFromGallery() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
       setState(() {
-        imageFile=pickedFile;
+        imageFile = pickedFile;
       });
     }
   }
 
+  @override
+  void initState() {
+    super.initState();
+    userNameTextEditingController.text = 'Арменка';
+    userPhoneTextEditingController.text = '+79210779641';
+    emailTextEditingController.text = 'prostreet1212@gmail.com';
+    passwordTextEditingController.text = '12345678';
+    vehicleModelTextEditingController.text = 'копейка';
+    vehicleColorTextEditingController.text = 'синяя';
+    vehicleNumberTextEditingController.text = 'Е123АУ 29';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,17 +158,30 @@ Navigator.push(context, MaterialPageRoute(builder: (c)=>Dashboard()));
           padding: const EdgeInsets.all(10),
           child: Column(
             children: [
-              const SizedBox(height: 40,),
-            imageFile==null?
-            CircleAvatar(
-              radius: 86,
-              backgroundImage: AssetImage('assets/images/avatarman.png'),
-            ):Container(
-              //here
-            ),
-              const SizedBox(height: 10,),
+              const SizedBox(
+                height: 40,
+              ),
+              imageFile == null
+                  ? CircleAvatar(
+                      radius: 86,
+                      backgroundImage:
+                          AssetImage('assets/images/avatarman.png'),
+                    )
+                  : Container(
+                      width: 180,
+                      height: 180,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.grey,
+                          image: DecorationImage(
+                              fit: BoxFit.fitHeight,
+                              image: FileImage(File(imageFile!.path)))),
+                    ),
+              const SizedBox(
+                height: 10,
+              ),
               GestureDetector(
-                onTap: (){
+                onTap: () {
                   chooseImageFromGallery();
                 },
                 child: const Text(
@@ -235,7 +305,6 @@ Navigator.push(context, MaterialPageRoute(builder: (c)=>Dashboard()));
                     const SizedBox(
                       height: 22,
                     ),
-
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.purple,
@@ -246,7 +315,8 @@ Navigator.push(context, MaterialPageRoute(builder: (c)=>Dashboard()));
                               horizontal: 80, vertical: 10)),
                       child: const Text('Sign Up'),
                       onPressed: () {
-                        checkIfNetworkIsAvailable();
+                        //checkIfNetworkIsAvailable();
+                        uploadImageToStorage();
                       },
                     )
                   ],

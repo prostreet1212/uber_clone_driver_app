@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'authentification/login_screen.dart';
+import 'firebase_options.dart';
 
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //await Firebase.initializeApp(/*options: DefaultFirebaseOptions.currentPlatform*/);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await Permission.locationWhenInUse.isDenied.then((valueOfPermission) {
     if(valueOfPermission){
       Permission.locationWhenInUse.request();
