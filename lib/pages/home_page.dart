@@ -21,6 +21,8 @@ class _HomePageState extends State<HomePage> {
   Completer<GoogleMapController>();
   GoogleMapController? controllerGoogleMap;
   Position? currentPositionOfUser;
+  Color colorToShow=Colors.green;
+  String titleToShow='';
 
   void updateMapTheme(GoogleMapController controller) {
     getJsonFileFromThemes('themes/night_style.json')
@@ -55,6 +57,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: Stack(
         children: [
+          //open map
           GoogleMap(
             mapType: MapType.normal,
             myLocationEnabled: true,
@@ -65,7 +68,26 @@ class _HomePageState extends State<HomePage> {
               googleMapCompleterController.complete(controllerGoogleMap);
               getCurrentLiveLocationOfDriver();
             },
-          )
+          ),
+          
+          //go online offline container
+          Positioned(
+            top: 61,
+              left: 0,
+              right: 0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  //here
+                 /* ElevatedButton(
+                    style:ElevatedButton.styleFrom(
+                      backgroundColor:
+                    ),
+                    child: Text(),
+                      onPressed: (){},
+                      )*/
+                ],
+              ))
         ],
       ),
     );
