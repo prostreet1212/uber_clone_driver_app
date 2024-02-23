@@ -28,6 +28,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark().copyWith(
+        useMaterial3: false,
           scaffoldBackgroundColor: Colors.black,
           buttonTheme: ButtonThemeData()),
       home:FirebaseAuth.instance.currentUser==null? LoginScreen():HomePage(),

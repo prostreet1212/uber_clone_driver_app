@@ -39,6 +39,8 @@ dependencies:
   permission_handler:
   geolocator:
   image_picker:
+  flutter_osm_plugin: ^1.0.0-rc.1
+  flutter_geofire:
 
 
   # The following adds the Cupertino Icons font to your application.
