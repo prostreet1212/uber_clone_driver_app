@@ -10,6 +10,7 @@ import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:uber_clone_driver_app/push_notification/push_notification_system.dart';
 
 import '../global/global_var.dart';
 
@@ -88,6 +89,16 @@ positionStreamHomePage=Geolocator.getPositionStream().listen(( position1) {
     newTripRequestReference!.onDisconnect();
     newTripRequestReference!.remove();
     newTripRequestReference=null;
+  }
+
+  initializePushNotificationSystem(){
+    PushNotificationSystem notificationSystem=PushNotificationSystem();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initializePushNotificationSystem();
   }
 
   @override
