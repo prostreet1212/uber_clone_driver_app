@@ -93,6 +93,8 @@ positionStreamHomePage=Geolocator.getPositionStream().listen(( position1) {
 
   initializePushNotificationSystem(){
     PushNotificationSystem notificationSystem=PushNotificationSystem();
+    notificationSystem.generateDeviceRegistrationToken();
+    notificationSystem.startListeningForNewNotification();
   }
 
   @override
