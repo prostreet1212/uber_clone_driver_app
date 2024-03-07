@@ -1,6 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:uber_clone_driver_app/models/trip_details.dart';
+import 'package:uber_clone_driver_app/widgets/loading_dialog.dart';
+import 'package:uber_clone_driver_app/widgets/notification_dialog.dart';
 
 class PushNotificationSystem {
   FirebaseMessaging firebaseCloudMessaging = FirebaseMessaging.instance;
@@ -17,27 +22,65 @@ class PushNotificationSystem {
     firebaseCloudMessaging.subscribeToTopic('users');
   }
 
-  startListeningForNewNotification()async{
+  startListeningForNewNotification(BuildContext context) async {
     //1. Terminated
-    firebaseCloudMessaging.getInitialMessage().then((messageRemote){
-      if(messageRemote!=null){
-        String tripID=messageRemote.data['tripID'];
+    firebaseCloudMessaging.getInitialMessage().then((messageRemote) {
+      if (messageRemote != null) {
+        String tripID = messageRemote.data['tripID'];
+        retrieveTripRequestInfo(tripID, context);
       }
     });
 
     //2. Foreground
     FirebaseMessaging.onMessage.listen((messageRemote) {
-      if(messageRemote!=null){
-        String tripID=messageRemote.data['tripID'];
+      if (messageRemote != null) {
+        String tripID = messageRemote.data['tripID'];
+        retrieveTripRequestInfo(tripID, context);
       }
     });
     //3. Background
     FirebaseMessaging.onMessageOpenedApp.listen((messageRemote) {
-      if(messageRemote!=null){
-        String tripID=messageRemote.data['tripID'];
+      if (messageRemote != null) {
+        String tripID = messageRemote.data['tripID'];
+        retrieveTripRequestInfo(tripID, context);
       }
     });
-
   }
 
+  retrieveTripRequestInfo(tripID, context) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => LoadingDialog(messageText: 'getting details...'));
+    DatabaseReference tripRequestRef =
+        FirebaseDatabase.instance.ref().child('tripRequests').child(tripID);
+    tripRequestRef.once().then((dataSnapshot) {
+      Navigator.pop(context);
+      //play notification sound
+
+      TripDetails tripDetailsInfo = TripDetails();
+      double pickUpLat = double.parse(
+          (dataSnapshot.snapshot.value! as Map)['pickUpLatLng']['latitude']);
+      double pickUpLng = double.parse(
+          (dataSnapshot.snapshot.value! as Map)['pickUpLatLng']['longitude']);
+      tripDetailsInfo.pickUpLatLng = LatLng(pickUpLat, pickUpLng);
+      tripDetailsInfo.pickUpAddress =
+          (dataSnapshot.snapshot.value! as Map)['pickUpAddress'];
+
+      double dropOffLat = double.parse(
+          (dataSnapshot.snapshot.value! as Map)['dropOffLatLng']['latitude']);
+      double dropOffLng = double.parse(
+          (dataSnapshot.snapshot.value! as Map)['dropOffLatLng']['longitude']);
+      tripDetailsInfo.dropOffLatLng = LatLng(dropOffLat, dropOffLng);
+
+      tripDetailsInfo.dropOffAddress =(dataSnapshot.snapshot.value! as Map)['dropOffAddress'];
+
+      tripDetailsInfo.userName =(dataSnapshot.snapshot.value! as Map)['userName'];
+      tripDetailsInfo.userPhone =(dataSnapshot.snapshot.value! as Map)['userPhone'];
+      
+      showDialog(
+          context: context,
+          builder: (context)=>NotificationDialog(tripDetailsInfo: tripDetailsInfo,));
+    });
+  }
 }

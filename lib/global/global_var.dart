@@ -12,3 +12,4 @@ String googleMapKey='AIzaSyBPq2bCfprMYNLBgL_1u4cLmJIZitUrMPw';
   zoom: 14.4746,
 );
  StreamSubscription<Position>? positionStreamHomePage;
+ int driverTripRequestTimeout=20;
