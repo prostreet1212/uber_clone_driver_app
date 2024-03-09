@@ -27,6 +27,7 @@ String tripRequestStatus='';
         Navigator.pop(context);
         timer.cancel();
         driverTripRequestTimeout=20;
+        player1.stop();
       }
 
     });
@@ -136,8 +137,9 @@ String tripRequestStatus='';
                         style: TextStyle(
                           color: Colors.white
                         ),),
-                        onPressed: (){
+                        onPressed: ()async{
                           Navigator.pop(context);
+                          await player1.stop();
                         },
                       ),),
                   SizedBox(width: 10,),
@@ -150,7 +152,8 @@ String tripRequestStatus='';
                         style: TextStyle(
                             color: Colors.white
                         ),),
-                      onPressed: (){
+                      onPressed: ()async{
+                        await player1.stop();
                         setState(() {
                           tripRequestStatus='accepted';
                         });

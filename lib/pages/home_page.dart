@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -10,6 +8,7 @@ import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:uber_clone_driver_app/push_notification/push_notification_system.dart';
 
 import '../global/global_var.dart';
@@ -264,7 +263,7 @@ positionStreamHomePage=Geolocator.getPositionStream().listen(( position1) {
                                               style: TextStyle(
                                                   color: Colors.white),
                                             ),
-                                            onPressed: () {
+                                            onPressed: () async{
                                               if (!isDriverAvailable) {
                                                 //go online
                                                 goOnlineNow();

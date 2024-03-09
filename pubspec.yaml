@@ -42,6 +42,8 @@ dependencies:
   flutter_osm_plugin: ^1.0.0-rc.1
   flutter_geofire:
   firebase_messaging:
+  just_audio: ^0.9.36
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -74,6 +76,7 @@ flutter:
   assets:
     - assets/images/
     - themes/
+    - assets/sound/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

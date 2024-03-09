@@ -3,6 +3,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:uber_clone_driver_app/global/global_var.dart';
 import 'package:uber_clone_driver_app/models/trip_details.dart';
 import 'package:uber_clone_driver_app/widgets/loading_dialog.dart';
 import 'package:uber_clone_driver_app/widgets/notification_dialog.dart';
@@ -54,9 +56,12 @@ class PushNotificationSystem {
         builder: (context) => LoadingDialog(messageText: 'getting details...'));
     DatabaseReference tripRequestRef =
         FirebaseDatabase.instance.ref().child('tripRequests').child(tripID);
-    tripRequestRef.once().then((dataSnapshot) {
+    tripRequestRef.once().then((dataSnapshot) async {
       Navigator.pop(context);
       //play notification sound
+       player1.setAudioSource(AudioSource.asset('assets/sound/alert_sound.mp3'));// Create a player
+      player1.play();
+
 
       TripDetails tripDetailsInfo = TripDetails();
       double pickUpLat = double.parse(
