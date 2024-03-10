@@ -82,7 +82,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     setState(() {
       urlOfUploadedImage;
     });
-    //registerNewDriver();
+    registerNewDriver();
   }
 
   registerNewDriver() async {
@@ -143,7 +143,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.initState();
     userNameTextEditingController.text = 'Арменка';
     userPhoneTextEditingController.text = '+79210779641';
-    emailTextEditingController.text = 'prostreet1212@gmail.com';
+    emailTextEditingController.text = 'armen@yandex.ru';
     passwordTextEditingController.text = '12345678';
     vehicleModelTextEditingController.text = 'копейка';
     vehicleColorTextEditingController.text = 'синяя';
