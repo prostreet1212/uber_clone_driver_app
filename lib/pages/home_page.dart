@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
       Completer<GoogleMapController>();
   GoogleMapController? controllerGoogleMap;
   Position? currentPositionOfUser;
-  GeoPoint? currentPositionOfUser1;
+  GeoPoint? currentPositionOfDriver1;
   Color colorToShow = Colors.green;
   String titleToShow = 'GO ONLINE NOW';
   bool isDriverAvailable = false;
@@ -53,8 +53,8 @@ class _HomePageState extends State<HomePage> {
     Geofire.initialize('onlineDrivers');
     Geofire.setLocation(
       FirebaseAuth.instance.currentUser!.uid,
-      currentPositionOfUser1!.latitude,
-      currentPositionOfUser1!.longitude,
+      currentPositionOfDriver1!.latitude,
+      currentPositionOfDriver1!.longitude,
     );
     newTripRequestReference = FirebaseDatabase.instance
         .ref()
@@ -68,13 +68,13 @@ class _HomePageState extends State<HomePage> {
 
   setAndGetLocationUpdates(){
 positionStreamHomePage=Geolocator.getPositionStream().listen(( position1) {
-  currentPositionOfUser1=GeoPoint(latitude: position1.latitude,
+  currentPositionOfDriver1=GeoPoint(latitude: position1.latitude,
       longitude: position1.longitude);
   if(isDriverAvailable){
     Geofire.setLocation(
         FirebaseAuth.instance.currentUser!.uid,
-        currentPositionOfUser1!.latitude,
-        currentPositionOfUser1!.longitude,
+        currentPositionOfDriver1!.latitude,
+        currentPositionOfDriver1!.longitude,
         );
   }
   /*LatLng position=LatLng(currentPositionOfUser1!.latitude
@@ -151,7 +151,9 @@ positionStreamHomePage=Geolocator.getPositionStream().listen(( position1) {
               if (isReady) {
                 await Future.delayed(Duration(seconds: 1), () async {
                   await mapController.currentLocation(); //???
-                  currentPositionOfUser1 = await mapController.myLocation();
+                  currentPositionOfDriver1 = await mapController.myLocation();
+                  //???
+                  driverCurrentPosition=currentPositionOfDriver1;
                   //getCurrentLiveLocationOfDriver();
                 });
               }
