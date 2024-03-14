@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:uber_clone_driver_app/global/global_var.dart';
 import 'package:uber_clone_driver_app/methods/common_methods.dart';
 import 'package:uber_clone_driver_app/models/trip_details.dart';
+import 'package:uber_clone_driver_app/pages/new_trip_page.dart';
 
 import 'loading_dialog.dart';
 
@@ -45,7 +46,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
     cancelNotificationDialogAfter20Sec();
   }
 
-  checkAvailabilityOfTripRequest(BuildContext context) {
+  checkAvailabilityOfTripRequest(BuildContext context)async {
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -56,7 +57,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
         .child('drivers')
         .child(FirebaseAuth.instance.currentUser!.uid)
         .child('newTripStatus');
-    driverTripStatusRef.once().then((snap) {
+    await driverTripStatusRef.once().then((snap) {
       Navigator.pop(context);
       Navigator.pop(context);
       String newTripStatusValue='';
@@ -68,7 +69,9 @@ class _NotificationDialogState extends State<NotificationDialog> {
       if(newTripStatusValue==widget.tripDetailsInfo!.tripID){
         driverTripStatusRef.set('accepted');
         //disable homepage location updates
-        cMethods.tu
+        cMethods.turnOffLocationUpdatesForHomePage();
+        Navigator.push(context, MaterialPageRoute(builder: (c)=>NewTripPage(newTripDetailsInfo:widget.tripDetailsInfo)));
+        
 
       }else if(newTripStatusValue=='cancelled'){
         cMethods.displaySnackBar('Trip Request has been cancelled by user', context);
