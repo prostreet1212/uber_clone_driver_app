@@ -31,7 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   connectivity_plus: ^5.0.2
-  firebase_core: ^2.24.2
+  firebase_core: ^2.27.1
   firebase_auth: ^4.16.0
   firebase_database: ^10.4.0
   firebase_storage: ^11.6.0
@@ -39,10 +39,17 @@ dependencies:
   permission_handler:
   geolocator:
   image_picker:
-  flutter_osm_plugin: ^1.0.0-rc.1
+  flutter_osm_plugin: ^1.0.0-rc.3
   flutter_geofire:
   firebase_messaging:
   just_audio: ^0.9.36
+  js: ^0.7.1
+  url_launcher:
+
+dependency_overrides:
+  js: ^0.6.3
+
+
 
 
 
@@ -53,6 +60,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

@@ -16,6 +16,7 @@ String googleMapKey='AIzaSyBPq2bCfprMYNLBgL_1u4cLmJIZitUrMPw';
   zoom: 14.4746,
 );
  StreamSubscription<Position>? positionStreamHomePage;
+ StreamSubscription<Position>? positionStreamNewTripPage;
  int driverTripRequestTimeout=20;
 
 final player1 = AudioPlayer();
