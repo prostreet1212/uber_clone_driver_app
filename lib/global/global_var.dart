@@ -23,5 +23,10 @@ final player1 = AudioPlayer();
 
 GeoPoint? driverCurrentPosition;
 
-
+String driverName = "";
+String driverPhone = "";
+String driverPhoto = "";
+String carColor = "";
+String carModel = "";
+String carNumber = "";
 

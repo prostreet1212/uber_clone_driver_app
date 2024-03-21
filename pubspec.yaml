@@ -39,12 +39,14 @@ dependencies:
   permission_handler:
   geolocator:
   image_picker:
-  flutter_osm_plugin: ^1.0.0-rc.3
+  flutter_osm_plugin: ^1.0.0-rc.5
   flutter_geofire:
   firebase_messaging:
   just_audio: ^0.9.36
   js: ^0.7.1
   url_launcher:
+  http: ^1.2.1
+  restart_app:
 
 dependency_overrides:
   js: ^0.6.3

@@ -9,6 +9,7 @@ import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:uber_clone_driver_app/methods/common_methods.dart';
 import 'package:uber_clone_driver_app/push_notification/push_notification_system.dart';
 
 import '../global/global_var.dart';
@@ -96,10 +97,30 @@ positionStreamHomePage=Geolocator.getPositionStream().listen(( position1) {
     notificationSystem.startListeningForNewNotification(context);
   }
 
+
+  retrieveCurrentDriverInfo() async
+  {
+    await FirebaseDatabase.instance.ref()
+        .child("drivers")
+        .child(FirebaseAuth.instance.currentUser!.uid)
+        .once().then((snap)
+    {
+      driverName = (snap.snapshot.value as Map)["name"];
+      driverPhone = (snap.snapshot.value as Map)["phone"];
+      driverPhoto = (snap.snapshot.value as Map)["photo"];
+      carColor = (snap.snapshot.value as Map)["car_details"]["carColor"];
+      carModel = (snap.snapshot.value as Map)["car_details"]["carModel"];
+      carNumber = (snap.snapshot.value as Map)["car_details"]["carNumber"];
+    });
+
+    initializePushNotificationSystem();
+  }
+
   @override
   void initState() {
     super.initState();
-    initializePushNotificationSystem();
+    retrieveCurrentDriverInfo();
+
   }
 
   @override
@@ -145,13 +166,18 @@ positionStreamHomePage=Geolocator.getPositionStream().listen(( position1) {
             ),
             onLocationChanged: (GeoPoint geo)async {
               print('ИЗменить${geo.toString()}');
-              //await mapController.currentLocation();
+              await mapController.currentLocation();
             },
             onMapIsReady: (isReady) async {
               if (isReady) {
                 await Future.delayed(Duration(seconds: 1), () async {
                   await mapController.currentLocation(); //???
                   currentPositionOfDriver1 = await mapController.myLocation();
+                  await mapController.enableTracking(
+                    enableStopFollow: false,
+                    disableUserMarkerRotation: true,
+                    // anchor: Anchor.left,  here anchor is testing you can put anchor that match with your need
+                  );
                   //???
                   driverCurrentPosition=currentPositionOfDriver1;
                   //getCurrentLiveLocationOfDriver();
@@ -301,7 +327,7 @@ positionStreamHomePage=Geolocator.getPositionStream().listen(( position1) {
                     },
                   )
                 ],
-              ))
+              )),
         ],
       ),
     );

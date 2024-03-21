@@ -338,10 +338,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_osm_plugin
-      sha256: "0e530d7aee8873cca65a9cfcae9a417811c70ebff7831a14dfa4fb33ee90d4bd"
+      sha256: "68b1ee41960093766812675755e446c2e4e1d883c61e4a256c126b621c56f9fe"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0-rc.4"
+    version: "1.0.0-rc.5"
   flutter_osm_web:
     dependency: transitive
     description:
@@ -481,7 +481,7 @@ packages:
     source: hosted
     version: "0.15.4"
   http:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: http
       sha256: "761a297c042deedc1ffbb156d6e2af13886bb305c2a343a4d972504cd67dd938"
@@ -800,6 +800,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
+  restart_app:
+    dependency: "direct main"
+    description:
+      name: restart_app
+      sha256: b37daeb1c02fcab30e19d9e30b6fdd215bd53577efd927042eb77cf6f09daadb
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.1"
   routing_client_dart:
     dependency: transitive
     description:

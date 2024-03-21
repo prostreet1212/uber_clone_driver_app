@@ -84,6 +84,32 @@ class _NotificationDialogState extends State<NotificationDialog> {
     });
   }
 
+  saveDriverDataToTripInfo()async{
+    Map<String,dynamic> driverDataMap={
+      "status": "accepted",
+      "driverID": FirebaseAuth.instance.currentUser!.uid,
+      "driverName": driverName,
+      "driverPhone": driverPhone,
+      "driverPhoto": driverPhoto,
+      "carDetails": carColor + " - " + carModel + " - " + carNumber,
+    };
+
+    Map<String, dynamic> driverCurrentLocation =
+    {
+      'latitude': driverCurrentPosition!.latitude.toString(),
+      'longitude': driverCurrentPosition!.longitude.toString(),
+    };
+    await FirebaseDatabase.instance.ref()
+        .child("tripRequests")
+        .child(widget.tripDetailsInfo!.tripID!)
+        .update(driverDataMap);
+
+    await FirebaseDatabase.instance.ref()
+        .child("tripRequests")
+        .child(widget.tripDetailsInfo!.tripID!)
+        .child("driverLocation").update(driverCurrentLocation);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -228,6 +254,7 @@ class _NotificationDialogState extends State<NotificationDialog> {
                       ),
                       onPressed: () async {
                         await player1.stop();
+                        await saveDriverDataToTripInfo();
                         setState(() {
                           tripRequestStatus = 'accepted';
                         });
