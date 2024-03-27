@@ -97,8 +97,8 @@ class _NewTripPageState extends State<NewTripPage> {
     LatLng lastPositionLatLng = LatLng(0, 0);
     positionStreamNewTripPage =
         Geolocator.getPositionStream().listen((Position position) {
-      driverCurrentPosition =
-          GeoPoint(latitude: position.latitude, longitude: position.longitude);
+     /* driverCurrentPosition =
+          GeoPoint(latitude: position.latitude, longitude: position.longitude);*/
       //LatLng driverCurrentPositionLatLng=LatLng(driverCurrentPosition!.latitude, driverCurrentPosition!.longitude);
 
       //lastPositionLatLng = driverCurrentPositionLatLng;
@@ -278,6 +278,7 @@ class _NewTripPageState extends State<NewTripPage> {
             onLocationChanged: (GeoPoint geo) async {
               print('ИЗменить${geo.toString()}');
               await osmMapController.currentLocation();
+              driverCurrentPosition = await osmMapController.myLocation();
               // osmMapController.initMapWithUserPosition;
             },
             onMapIsReady: (isReady) async {
@@ -306,7 +307,7 @@ class _NewTripPageState extends State<NewTripPage> {
             },
             mapIsLoading: Center(child: CircularProgressIndicator()),
           ),
-          ElevatedButton(onPressed: ()async{
+         /* ElevatedButton(onPressed: ()async{
             Map<String,dynamic> driverDataMap={
               "status": "accepted",
 
@@ -316,7 +317,7 @@ class _NewTripPageState extends State<NewTripPage> {
                 .child(widget.newTripDetailsInfo!.tripID!)
                 .update(driverDataMap);
           },
-              child: Text('aaaaaa')),
+              child: Text('aaaaaa')),*/
           //trip details
           Positioned(
               left: 0,

@@ -338,18 +338,18 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_osm_plugin
-      sha256: "68b1ee41960093766812675755e446c2e4e1d883c61e4a256c126b621c56f9fe"
+      sha256: dfc1be88f8a227287a4468a32f49a416c19c6a0a7260f3c3bf2834fd0a14cf79
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0-rc.5"
+    version: "1.0.0-rc.6"
   flutter_osm_web:
     dependency: transitive
     description:
       name: flutter_osm_web
-      sha256: "729668888cd05c17f8578efb66b962cfe3f5bff72621ae4446f07781a1dfc16d"
+      sha256: f5f589e03d12354268db89fdf3fe2f0be68512d5423a1966b49cb3c829c0c29b
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0-rc.3"
+    version: "1.0.0-rc.4"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -812,10 +812,10 @@ packages:
     dependency: transitive
     description:
       name: routing_client_dart
-      sha256: b7d48ba131d9a73933855d64df911364564a367b5be222ab30eba4fc1632ebcc
+      sha256: "4e2acf1145bb8056e04fd93101a9f2bab2fd769c9d972f7f403f9733a670cb33"
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.4"
+    version: "0.5.5"
   rxdart:
     dependency: transitive
     description:

@@ -167,6 +167,8 @@ positionStreamHomePage=Geolocator.getPositionStream().listen(( position1) {
             onLocationChanged: (GeoPoint geo)async {
               print('ИЗменить${geo.toString()}');
               await mapController.currentLocation();
+              currentPositionOfDriver1 = await mapController.myLocation();
+              driverCurrentPosition=currentPositionOfDriver1;
             },
             onMapIsReady: (isReady) async {
               if (isReady) {
