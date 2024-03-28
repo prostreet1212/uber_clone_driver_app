@@ -166,9 +166,9 @@ positionStreamHomePage=Geolocator.getPositionStream().listen(( position1) {
             ),
             onLocationChanged: (GeoPoint geo)async {
               print('ИЗменить${geo.toString()}');
-              await mapController.currentLocation();
+              /*await mapController.currentLocation();
               currentPositionOfDriver1 = await mapController.myLocation();
-              driverCurrentPosition=currentPositionOfDriver1;
+              driverCurrentPosition=currentPositionOfDriver1;*/
             },
             onMapIsReady: (isReady) async {
               if (isReady) {
@@ -181,7 +181,10 @@ positionStreamHomePage=Geolocator.getPositionStream().listen(( position1) {
                     // anchor: Anchor.left,  here anchor is testing you can put anchor that match with your need
                   );
                   //???
-                  driverCurrentPosition=currentPositionOfDriver1;
+                  Position p=await Geolocator.getCurrentPosition(
+                      desiredAccuracy: LocationAccuracy.bestForNavigation);
+                  driverCurrentPosition=GeoPoint(latitude: p.latitude, longitude: p.longitude);
+                  //driverCurrentPosition=currentPositionOfDriver1;
                   //getCurrentLiveLocationOfDriver();
                 });
               }

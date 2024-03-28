@@ -97,8 +97,8 @@ class _NewTripPageState extends State<NewTripPage> {
     LatLng lastPositionLatLng = LatLng(0, 0);
     positionStreamNewTripPage =
         Geolocator.getPositionStream().listen((Position position) {
-     /* driverCurrentPosition =
-          GeoPoint(latitude: position.latitude, longitude: position.longitude);*/
+      driverCurrentPosition =
+          GeoPoint(latitude: position.latitude, longitude: position.longitude);
       //LatLng driverCurrentPositionLatLng=LatLng(driverCurrentPosition!.latitude, driverCurrentPosition!.longitude);
 
       //lastPositionLatLng = driverCurrentPositionLatLng;
@@ -277,8 +277,8 @@ class _NewTripPageState extends State<NewTripPage> {
             ),
             onLocationChanged: (GeoPoint geo) async {
               print('ИЗменить${geo.toString()}');
-              await osmMapController.currentLocation();
-              driverCurrentPosition = await osmMapController.myLocation();
+              //await osmMapController.currentLocation();
+              //driverCurrentPosition = await osmMapController.myLocation();
               // osmMapController.initMapWithUserPosition;
             },
             onMapIsReady: (isReady) async {
@@ -290,7 +290,10 @@ class _NewTripPageState extends State<NewTripPage> {
                     disableUserMarkerRotation: true,
                     // anchor: Anchor.left,  here anchor is testing you can put anchor that match with your need
                   );
-                  driverCurrentPosition = await osmMapController.myLocation();
+                  Position p=await Geolocator.getCurrentPosition(
+                      desiredAccuracy: LocationAccuracy.bestForNavigation);
+                  driverCurrentPosition=GeoPoint(latitude: p.latitude, longitude: p.longitude);
+                  //driverCurrentPosition = await osmMapController.myLocation();
                   firstDriverPosition = driverCurrentPosition;
                   //driverCurrentPosition = GeoPoint(latitude: geo.longitude, longitude: geo.latitude);
                   var driverCurrentLocationLatLng = LatLng(
